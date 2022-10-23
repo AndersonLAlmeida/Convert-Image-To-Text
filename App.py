@@ -1,30 +1,18 @@
-import os
-from libs.process_image import*
-from libs.text_recog import*
-import cv2
-
-def get_text(image):
-    lang = 'por'
-
-    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-    picture = process_image(gray)
-    text = text_recog(picture, lang)
-
-    return text
-
-# def process_text():
-#
-#
-# def save_file():
-
+from ocr.text_recog import*
+from process_image.process_image import process_image
 
 if __name__ == '__main__':
-    pathToimages = "C:/Users/ander/dev/hinario/lestras/letras_jpg/"
+    path_to_images = "/home/anderson/dev/Convert-Image-To-Text/images/"
+    lang = 'por'
 
-    caminhos = [os.path.join(pathToimages, nome) for nome in os.listdir(pathToimages)]
+    caminhos = [os.path.join(path_to_images, nome) for nome in os.listdir(path_to_images)]
     arquivos = [arq for arq in caminhos if os.path.isfile(arq)]
     jpgs = [arq for arq in arquivos if arq.lower().endswith(".png")]
+    jpgs.sort()
+
 
     for image_path in jpgs:
-        image = cv2.imread(image_path)
-        text = get_text(image)
+        texts_image = process_image(image_path)
+
+        for text in texts_image:
+            text_recog(text, lang)

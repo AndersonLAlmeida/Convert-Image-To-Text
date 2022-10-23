@@ -7,9 +7,10 @@ from PIL import Image
 
 
 def text_recog(text_im, lang):
-    #apply thresholding to preprocess the image
-    text_im = cv2.threshold(text_im, 0, 255,cv2.THRESH_BINARY | cv2.THRESH_OTSU)[1]
+    # apply thresholding to preprocess the image
+    text_im = cv2.threshold(text_im, 210, 255, cv2.THRESH_BINARY)[1]
     cv2.imshow('Thrs', text_im)
+    cv2.waitKey()
 
     # write the image to disk as a temporary file so we can
     # apply OCR to it
@@ -22,7 +23,21 @@ def text_recog(text_im, lang):
     # The variable lang represents the traned data of tesseract ocr
     text = pytesseract.image_to_string(Image.open(filename), lang=lang)
     os.remove(filename)
-    print (text)
-    print (" ")
+    text = text.replace("", "")
+
+    save_content(text, "hinario.txt")
 
     return text
+
+
+def save_content(text, filename):
+    # A text file is created and flushed
+    file = open(filename, "a")
+    # Appending the text into file
+    file.write("\n")
+    file.write("NEXT IMAGE")
+    file.write("\n")
+    file.write(text)
+    file.write("\n")
+    # Close the file
+    file.close
